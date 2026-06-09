@@ -1,0 +1,73 @@
+{
+  "environments": {
+    "PROD": {
+      "host": "192.168.1.100",
+      "port": 5000,
+      "connectTimeoutMs": 5000,
+      "reconnectDelayMs": 1000,
+      "maxReconnectDelayMs": 10000
+    },
+    "DR": {
+      "host": "192.168.2.100",
+      "port": 5000,
+      "connectTimeoutMs": 5000,
+      "reconnectDelayMs": 1000,
+      "maxReconnectDelayMs": 10000
+    }
+  },
+  "soupBinTcp": {
+    "username": "USER_PLACEHOLDER",
+    "password": "PASSWORD_PLACEHOLDER",
+    "requestedSessionFile": "./data/session.dat",
+    "sessionStoreFile": "./data/session_store.dat"
+  },
+  "redis": {
+    "enabled": true,
+    "host": "127.0.0.1",
+    "port": 6379,
+    "password": "",
+    "db": 0,
+    "keyPrefix": "receiver",
+    "pipelineBatchSize": 100
+  },
+  "socketIo": {
+    "enabled": true,
+    "host": "0.0.0.0",
+    "port": 3001,
+    "cors": {
+      "origin": "*",
+      "methods": ["GET", "POST"]
+    }
+  },
+  "tcpRelay": {
+    "enabled": true,
+    "host": "0.0.0.0",
+    "port": 3002
+  },
+  "tcpRetransmission": {
+    "enabled": true,
+    "host": "0.0.0.0",
+    "port": 3003
+  },
+  "apiServer": {
+    "enabled": true,
+    "host": "0.0.0.0",
+    "port": 3004
+  },
+  "logging": {
+    "logFolder": "./logs",
+    "filenamePattern": "ReceiverLog_{USER_INITIAL}_{MMDDYYYY}.log",
+    "level": "info",
+    "enableConsole": true
+  },
+  "runtime": {
+    "maxInMemoryPackets": 10000,
+    "maxInMemoryMessages": 10000,
+    "displayMode": "ON",
+    "burstQueueHighWatermark": 50000,
+    "packetFlushBatchSize": 500
+  },
+  "parser": {
+    "supportedVersions": ["V2026", "V2015"]
+  }
+}
