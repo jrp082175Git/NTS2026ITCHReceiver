@@ -28,24 +28,50 @@ The application relies on `receiver.config.json` inside the `config` folder. Ens
 * **SocketIo, tcpRelay, tcpRetransmission, apiServer:** Feature flags and local host port mappings.
 * **Logging:** Level and standard rolling constraints.
 
-## Runtime Examples
+## How to Execute the Application
+
+To execute the Receiver application, use Node.js and point it to the main `Receiver.js` file, providing exactly 5 required command-line arguments in the specified order.
+
+### Execution Command Format
+
+```bash
+node src/Receiver.js <ENV> <START_MODE> <VERSION> <DISPLAY_MODE> <INITIALS>
+```
+
+### Parameter Explanations
+
+The application requires exactly 5 arguments:
+
+1. **Env (`PROD` | `DR`)**:
+   * Indicates the environment configuration to load from `receiver.config.json`.
+   * Example: `PROD`
+2. **Start Mode (`START:Y` | `START:N`)**:
+   * `START:Y`: Drops cache/memory logs, initializes the sequence to `1`, and starts a fresh session.
+   * `START:N`: Resumes an existing session from Redis state, loading the previous session ID and requesting `lastSequenceNo + 1`.
+   * Example: `START:Y`
+3. **Version (`V2026` | `V2015`)**:
+   * Targets the underlying ITCH decode mapping specification.
+   * Example: `V2026`
+4. **Display (`DISPLAY:ON` | `DISPLAY:OFF`)**:
+   * Enables (`DISPLAY:ON`) or disables (`DISPLAY:OFF`) printing parsed packets directly to the console.
+   * Example: `DISPLAY:ON`
+5. **Initials (e.g., `JP` or `JP,AB`)**:
+   * Determines standard logging metadata. Multiple initials must be separated by a comma.
+   * Example: `JP`
+
+### Execution Examples
 
 **Start a fresh session in Production for V2026 with display on:**
 ```bash
 node src/Receiver.js PROD START:Y V2026 DISPLAY:ON JP
 ```
 
-**Resume an existing session:**
+**Resume an existing session (Disaster Recovery env) using V2015 without console display:**
 ```bash
-node src/Receiver.js PROD START:N V2026 DISPLAY:OFF JP
+node src/Receiver.js DR START:N V2015 DISPLAY:OFF JP,OPS
 ```
 
-## Parameters
-1. **Env (`PROD` | `DR`)**: Tells configLoader which credentials to apply.
-2. **Start (`START:Y` | `START:N`)**: START:Y drops cache memory logs and issues sequence 1. START:N resumes from Redis state and issues `lastSequenceNo + 1`.
-3. **Version (`V2026` | `V2015`)**: Targets the underlying ITCH decode mapping.
-4. **Display (`DISPLAY:ON` | `DISPLAY:OFF`)**: Turns console output parsing on or off.
-5. **Initials (`JP`, etc)**: Determines standard logging metadata.
+*Note: Ensure your Redis server is running and accessible based on your `receiver.config.json` before executing the application to persist data properly.*
 
 ## Sequence Handling
 The Receiver operates exclusively via local increment tracking. ONLY `Sequenced Data Packet (S)` advances the current known sequence pointer. Inbound Debug, Heartbeat, and generic events do NOT mutate the sequence integer.
