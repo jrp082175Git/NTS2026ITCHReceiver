@@ -147,7 +147,7 @@ export class PacketProcessor {
       }
 
       this.logger.info(`Sequenced Data: ${messageJsonStr}`);
-      if (this.display) this.display.log(`Sequence Data received sequenceNo=${sequenceNo}`);
+      if (this.display) this.display.logJson(`Sequence Data received sequenceNo=${sequenceNo}`, messageJsonStr);
 
     } catch (err) {
       this.logger.error(`Parser error on sequence parsing: ${err.message}`);
