@@ -1,3 +1,5 @@
+import { readUInt16BE } from '../utils/bufferUtils.js';
+
 export class TcpStreamFramer {
   constructor() {
     this.pendingBuffer = Buffer.alloc(0);
@@ -11,8 +13,8 @@ export class TcpStreamFramer {
     const packets = [];
 
     while (this.pendingBuffer.length >= 2) {
-      // Read the first 2 bytes as big-endian packetLength
-      const packetLength = this.pendingBuffer.readUInt16BE(0);
+      // Read the first 2 bytes as big-endian packetLength via the safe endian reader
+      const packetLength = readUInt16BE(this.pendingBuffer, 0);
 
       // Calculate full logical packet length as 2 + packetLength
       const fullLength = 2 + packetLength;

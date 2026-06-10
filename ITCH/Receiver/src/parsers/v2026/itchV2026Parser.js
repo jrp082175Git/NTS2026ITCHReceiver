@@ -1,4 +1,4 @@
-import { readUInt16BE, readUInt32BE, readBigInt64BE, readAlphaTrim, readAscii } from '../../utils/bufferUtils.js';
+import { readUInt16BE, readUInt32BE, readBigInt64BE, readBigUInt64BE, readAlphaTrim, readAscii } from '../../utils/bufferUtils.js';
 import { getV2026Schema } from './itchV2026MessageRegistry.js';
 
 export class ItchV2026Parser {
@@ -35,7 +35,7 @@ export class ItchV2026Parser {
         parsedFields[field.name] = readUInt32BE(buffer, offset);
         offset += 4;
       } else if (field.type === 'uint64') {
-        parsedFields[field.name] = readBigInt64BE(buffer, offset).toString();
+        parsedFields[field.name] = readBigUInt64BE(buffer, offset).toString();
         offset += 8;
       } else if (field.type === 'int64') {
         const rawValue = readBigInt64BE(buffer, offset);
