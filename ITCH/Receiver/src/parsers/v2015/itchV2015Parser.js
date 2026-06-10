@@ -1,4 +1,4 @@
-import { readUInt16BE, readUInt32BE, readBigInt64BE, readAlphaTrim, readAscii } from '../../utils/bufferUtils.js';
+import { readUInt16BE, readUInt32BE, readBigInt64BE, readBigUInt64BE, readAlphaTrim, readAscii } from '../../utils/bufferUtils.js';
 import { getV2015Schema } from './itchV2015MessageRegistry.js';
 
 export class ItchV2015Parser {
@@ -35,7 +35,8 @@ export class ItchV2015Parser {
         parsedFields[field.name] = readUInt32BE(buffer, offset);
         offset += 4;
       } else if (field.type === 'uint64') {
-        parsedFields[field.name] = readBigInt64BE(buffer, offset).toString();
+        // use BigInt for 8-byte ints
+        parsedFields[field.name] = readBigUInt64BE(buffer, offset).toString();
         offset += 8;
       } else if (field.type === 'uint32_price') {
         const rawValue = readUInt32BE(buffer, offset);
